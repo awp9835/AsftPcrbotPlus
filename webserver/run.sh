@@ -1,0 +1,1 @@
+java -classpath . AwpBotWebsiteServer 9836

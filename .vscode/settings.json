@@ -1,0 +1,8 @@
+{
+	"java.project.referencedLibraries": [
+		"lib/**/*.jar",
+		"thirdpartjar/Java-WebSocket-1.5.1-with-dependencies.jar",
+		"thirdpartjar/json-20201115.jar"
+	],
+	"java.autobuild.enabled": true
+}

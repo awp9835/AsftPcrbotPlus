@@ -1,0 +1,1 @@
+nohup java -classpath . AwpBotWebsiteServer 9836 >/dev/null 2>&1 &
