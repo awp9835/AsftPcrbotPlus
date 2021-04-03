@@ -11,9 +11,10 @@
 
 # 技术引用和API #   
 OneBot标准：https://github.com/howmanybots/onebot   
-Yobot：https://yobot.win/
+Yobot：https://yobot.win/   
 Kyouka：https://github.com/Kengxxiao/Kyouka   
-竞技场API：参考自
+竞技场API：参考自https://github.com/lulu666lulu/pcrjjc 的README.md   
+竞技场有查询间隔限制，反射弧长   
 ```   
 //每查询一次排名要调用至少2次API，请至少间隔1000ms调用。    
 https://help.tencentbot.top/enqueue?target_viewer_id=...   
