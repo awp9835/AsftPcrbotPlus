@@ -109,14 +109,14 @@ public class AsftPcrPvpComponent implements AwpBotComponent
 			if(GroupPcrPvpManager.isOwner(mevt.getUserId()))
 			{
 				reply = "保存 保存击剑状态 注销所有击剑群"
-				+ "注册击剑群 注销击剑群 设置查询周期 状态";
+				+ "注册击剑群 注销击剑群 设置PVP查询周期 状态";
 			}
 		}
 		else if(message.equals("状态"))
 		{
 			reply = "已注册的击剑群：" + InnerGroupPcrPvpManager.getAllGroups();
 		}
-		else if(message.equals("设置PVP查询周期"))
+		else if(message.startsWith("设置PVP查询周期"))
 		{
 			if(GroupPcrPvpManager.isOwner(mevt.getUserId()))
 			{
