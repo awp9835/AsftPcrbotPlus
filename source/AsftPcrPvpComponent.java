@@ -171,7 +171,7 @@ public class AsftPcrPvpComponent implements AwpBotComponent
 		{
 			reply = "灵梦PVP插件V1.0\n本插件不可跨群使用，可发送 \"PVP帮助\" 获取使用方法";
 		}
-		else if(message.equals("帮助"))
+		else if(message.equals("帮助")||message.toLowerCase(Locale.ROOT).equals("pvp帮助"))
 		{
 			reply = "灵梦PVP插件V1.0\n指令格式(空格不可省略，名称可省略，[]表示选择其一)：\n"+
 			"[查询 查询昨日][公会 档线] 名称\n"+
@@ -210,7 +210,7 @@ public class AsftPcrPvpComponent implements AwpBotComponent
 		if(message.toLowerCase(Locale.ROOT).equals("version"))
 		{
 			reply = "灵梦PVP插件V1.0\n本插件不可跨群使用，可发送 \"PVP帮助\" 获取使用方法。\n";
-			shishanflag = 100;
+			shishanflag = 0x100;
 			if(InnerGroupPcrPvpManager.getAllGroups().contains(mevt.getGroupId()))
 			{
 				reply += "本群已注册为击剑群。\n友情提示：请使用小群，防止扰民。\n";
@@ -222,7 +222,7 @@ public class AsftPcrPvpComponent implements AwpBotComponent
 		}
 		else if(message.equals("帮助")||message.toLowerCase(Locale.ROOT).equals("pvp帮助"))
 		{
-			shishanflag = 101;
+			shishanflag = 0x101;
 			reply = "灵梦PVP插件V1.0\n指令格式(空格不可省略。[]表示选择其一)：\n"+
 			"[查询 查询昨日][公会 档线] 名称\n"+
 			"（例如：查询公会 灵梦）\n"+
@@ -237,13 +237,13 @@ public class AsftPcrPvpComponent implements AwpBotComponent
 			"注：排名追踪只能在已注册的击剑群内使用，"+
 			"要注册击剑群，请联系主人。\n";
 		}
-		else if(message.startsWith("双场排名追踪")) shishanflag = 30;
-		else if(message.startsWith("战斗排名追踪")) shishanflag = 10;
-		else if(message.startsWith("公主排名追踪")) shishanflag = 20;
-		else if(message.startsWith("双场下降追踪")) shishanflag = 31;
-		else if(message.startsWith("战斗下降追踪")) shishanflag = 11;
-		else if(message.startsWith("公主下降追踪")) shishanflag = 21;
-		if(shishanflag > 1 && shishanflag <100)
+		else if(message.startsWith("双场排名追踪")) shishanflag = 0x30;
+		else if(message.startsWith("战斗排名追踪")) shishanflag = 0x10;
+		else if(message.startsWith("公主排名追踪")) shishanflag = 0x20;
+		else if(message.startsWith("双场下降追踪")) shishanflag = 0x31;
+		else if(message.startsWith("战斗下降追踪")) shishanflag = 0x11;
+		else if(message.startsWith("公主下降追踪")) shishanflag = 0x21;
+		if(shishanflag > 0x1 && shishanflag <0x100)
 		{
 			String[] msgargs = message.replaceAll("\\[CQ:.*?\\]","").split("\\s+",3);
 			long target = 0;
@@ -251,7 +251,7 @@ public class AsftPcrPvpComponent implements AwpBotComponent
 			if(msgargs.length == 1 ) reply = "未提供参数";
 			else if(target< 1000000000000L || target > 9999999999999L) reply = "ID位数错误";
 			else if(InnerGroupPcrPvpManager.addTarget(mevt.getUserId(),mevt.getGroupId(), target,
-				(shishanflag & 10)!=0, (shishanflag & 20)!=0, (shishanflag & 1)!=0))
+				(shishanflag & 0x10)!=0, (shishanflag & 0x20)!=0, (shishanflag & 0x01)!=0))
 			{
 				reply = "已添加对" + target + "的追踪，至少需要两分钟才能生效。";
 				if(msgargs.length==3)
