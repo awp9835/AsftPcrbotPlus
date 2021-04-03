@@ -7,7 +7,40 @@
 3. 查询公会排名，jjc排名追踪提醒   
 
 群内发送 帮助 可获取使用方法。
-如果你是主人，请私聊bot发送 主人 获取主人可用的功能。   
+如果你是主人，请私聊bot发送 主人 获取主人可用的功能。
+
+# 技术引用和API #   
+OneBot标准：https://github.com/howmanybots/onebot   
+Yobot：https://yobot.win/
+Kyouka：https://github.com/Kengxxiao/Kyouka   
+竞技场API：参考自
+```   
+//每查询一次排名要调用至少2次API，请至少间隔1000ms调用。    
+https://help.tencentbot.top/enqueue?target_viewer_id=...   
+//target_viewer_id：你的游戏内数字ID   
+//返回json，request_id用于下一个api，注意返回的key有拼写错误，写成了reqeust_id   
+   
+https://help.tencentbot.top/query?request_id=...
+//request_id：上一个API返回的reqeust_id   
+//如果succeed，返回的json如下:   
+{   
+	"status":"done",   
+	"data":
+	{
+		"user_info":
+		{
+			"arena_data": 战斗竞技场排名,
+			"grand_arena_data": 公主竞技场排名
+		}
+	}
+}   
+//也可能需要在1s后重新查询：  
+{   
+	"status":"queue",   
+	"pos": 正在排队查询的人数   
+}   
+
+```   
 # 部署过程 #   
 0. 要运行本插件，你得有个jdk，也就是java，如果连装java都不会我就没什么说的了。所有java文件都使用UTF-8编码，不带BOM，注意别用windows的记事本修改（小心“锘锘锘”“锟斤拷”），用别的编辑器（如VSCode，Notepad++）。
 1. 打开GroupChatSaveManager.java 找到public boolean isOwner(long operatorid)，修改主人QQ（后面加L，如1145141919L），多个主人可以用逗号隔开。   

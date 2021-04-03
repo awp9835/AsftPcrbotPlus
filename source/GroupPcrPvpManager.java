@@ -1,5 +1,4 @@
 import java.io.*;
-import java.lang.annotation.Target;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -368,7 +367,6 @@ public class GroupPcrPvpManager
 			ret.close();  
 			String result = new JSONObject(ret.toString()).optString("request_id",null);
 			if(result == null) result = new JSONObject(ret.toString()).getString("reqeust_id");
-			//System.out.println(result);
 			Thread.sleep(1024);
 			while(true)
 			{
@@ -399,6 +397,14 @@ public class GroupPcrPvpManager
 		}
 		catch (Exception e)
 		{
+			try
+			{
+				Thread.sleep(1024);
+			}
+			catch (Exception e2)
+			{
+				//donothing
+			}
 			return new PvpTargetStates();
 		}
 	}
@@ -584,7 +590,7 @@ public class GroupPcrPvpManager
 			try
 			{
 				JSONArray array = requestGuildStates(ClanName, Line, History, 3000);
-				System.out.println(array);
+				//System.out.println(array);
 				if(array == null)
 				{
 					AsftOneBotApi.SendGroupMessage_cqstr(GroupId, "查询失败，未知错误。").send(Bot);
@@ -668,7 +674,7 @@ public class GroupPcrPvpManager
 			{
 				try
 				{
-					Thread.sleep(60000);
+					//Thread.sleep(60000);
 					int cnt = 0;
 					for(Long groupid: GroupGlobalPvpManagerMap.keySet())
 					{
@@ -679,6 +685,7 @@ public class GroupPcrPvpManager
 						for(Long userid :settings.Id_Targets_Map.keySet())
 						{
 							if(isBlackUser(userid)) continue;
+							//System.out.println(userid);
 							Vector<PvpTarget> targets = settings.Id_Targets_Map.get(userid);
 							if(targets == null) continue;
 							StringBuilder userresult = new StringBuilder(1024);
@@ -687,10 +694,13 @@ public class GroupPcrPvpManager
 								PvpTarget target = new PvpTarget(pvpTarget);
 								PvpTargetStates[] newold =  settings.Target_States_Map.get(target.Target);
 								if(newold == null) continue;
+								//System.out.println(" "+target + " "+ newold[0].Valid +" "+ newold[1].Valid);
+								//System.out.println();
 								if(!newold[0].Valid || !newold[1].Valid) continue;
 								if(target.Jjc)
 								{
-									System.out.println("" + newold[0].Jjcrank+" " + newold[1].Jjcrank +" "+target.Self);
+									//System.out.println("" + newold[0].Jjcrank+" " + newold[1].Jjcrank +" "+target.Self);
+									//System.out.println("" + newold[0].Valid+" " + newold[1].Valid);
 									if(newold[0].Jjcrank > newold[1].Jjcrank 
 									||(!target.Self && newold[0].Jjcrank < newold[1].Jjcrank))
 									{
