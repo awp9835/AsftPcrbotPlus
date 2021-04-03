@@ -674,7 +674,7 @@ public class GroupPcrPvpManager
 			{
 				try
 				{
-					//Thread.sleep(60000);
+					Thread.sleep(60000);
 					int cnt = 0;
 					for(Long groupid: GroupGlobalPvpManagerMap.keySet())
 					{
