@@ -390,8 +390,16 @@ public class AsftPcrPvpComponent implements AwpBotComponent
 		if(nevt.isGroupMemberDecreaseEvent())
 		{
 			if( ((AsftOneBotEvent.GroupMemberDecreaseEvent)nevt).isKickMeEvent()) InnerGroupPcrPvpManager.purgeGroup(nevt.getGroupId());
-			if( ((AsftOneBotEvent.GroupMemberDecreaseEvent)nevt).isKickEvent()) AsftOneBotApi.SendGroupMessage_text(nevt.getGroupId(), "" + nevt.getUserId()  +"退群了").send(bot);
-			else AsftOneBotApi.SendGroupMessage_text(nevt.getGroupId(), "" + nevt.getUserId()  +"退群了。").send(bot);
+			if( ((AsftOneBotEvent.GroupMemberDecreaseEvent)nevt).isKickEvent()) 
+			{
+				InnerGroupPcrPvpManager.leaveGroup(nevt.getUserId(), nevt.getGroupId());
+				AsftOneBotApi.SendGroupMessage_text(nevt.getGroupId(), "" + nevt.getUserId()  +"被肃反了。").send(bot);
+			}
+			else 
+			{
+				InnerGroupPcrPvpManager.leaveGroup(nevt.getUserId(), nevt.getGroupId());
+				AsftOneBotApi.SendGroupMessage_text(nevt.getGroupId(), "" + nevt.getUserId()  +"退群了。").send(bot);
+			}
 		}
 		return "continue";
 	}

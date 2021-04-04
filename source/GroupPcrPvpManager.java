@@ -674,13 +674,13 @@ public class GroupPcrPvpManager
 				try
 				{
 					Thread.sleep(60000);
-					int cnt = 0;
+					float cnt = 0;
 					for(Long groupid: GroupGlobalPvpManagerMap.keySet())
 					{
 						if(isBlackGroup(groupid)) continue;
 						PvpTargetSettings settings = GroupGlobalPvpManagerMap.get(groupid);
 						if(settings == null) continue;
-						cnt += settings.renew(1000);
+						cnt += 1.0f * settings.renew(1000);
 						for(Long userid :settings.Id_Targets_Map.keySet())
 						{
 							if(isBlackUser(userid)) continue;
@@ -738,7 +738,8 @@ public class GroupPcrPvpManager
 							}
 						}
 					}
-					if(cnt< 60L * (IntervalMin - 1)) Thread.sleep(((long) (IntervalMin -1) * 60L - cnt) * 1000);
+					cnt *= 1.537f;
+					if((int)cnt < 60L * (IntervalMin - 1)) Thread.sleep(((long) (IntervalMin -1) * 60L - (int)cnt) * 1000);
 				}
 				catch(Exception e)
 				{
@@ -809,6 +810,12 @@ public class GroupPcrPvpManager
 	public boolean removeAllTarget(long userid,long groupid)
 	{
 		if(isBlackUser(userid)||isBlackGroup(groupid)) return false;
+		PvpTargetSettings settings = GroupGlobalPvpManagerMap.get(groupid); 
+		if(settings == null) return false;
+		return settings.removeAllTarget(userid);
+	}
+	public boolean leaveGroup(long userid,long groupid)
+	{
 		PvpTargetSettings settings = GroupGlobalPvpManagerMap.get(groupid); 
 		if(settings == null) return false;
 		return settings.removeAllTarget(userid);
