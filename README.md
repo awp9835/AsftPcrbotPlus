@@ -87,6 +87,9 @@ rm class/*
 # 启动 #
 在此之前别忘了先启动onebot（例如mirai）和yobot。    
 windows下运行很简单，看见那几个cmd没？ （有黑框运行：run.cmd，无黑框运行：jawawrun.cmd）    
-linux下运行也很简单，看见那几个sh没？ （终端运行：sh run.sh,  nohup运行：sh nhrun.sh, nohup无nohup.out运行：sh nhnlrun.sh。注意：nohup需要root权限）如果出问题，可以手动输入命令运行，冒号不行就用分号。     
+linux下运行也很简单，看见那几个sh没？ （终端运行：sh run.sh,  nohup运行：sudo sh nhrun.sh, nohup无nohup.out运行：sudo sh nhnlrun.sh。注意：nohup需要root权限）如果出问题，可以手动输入命令运行，冒号不行就用分号。     
 你可以在命令中手动决定本插件的端口，默认9835。   
 
+# 如何关闭bot #   
+第一步：私聊Bot“保存”，重要！！！否则丢失最近1小时的数据！   
+第二步：结束服务进程，windows用任务管理器，linux用```ps -aux |grep java```查询到pid后，再sudo kill 进程。   
