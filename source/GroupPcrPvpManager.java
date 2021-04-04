@@ -335,8 +335,7 @@ public class GroupPcrPvpManager
 				if(newold == null) continue;
 				cnt++;
 				PvpTargetStates states = requestPvpTargetStates(key, halftimeout);
-				if(!states.Valid) continue;
-				newold[1] = newold[0];
+				if(newold[0].Valid) newold[1] = newold[0];
 				newold[0] = states;	
 			}
 			return cnt;
@@ -367,7 +366,7 @@ public class GroupPcrPvpManager
 			ret.close();  
 			String result = new JSONObject(ret.toString()).optString("request_id",null);
 			if(result == null) result = new JSONObject(ret.toString()).getString("reqeust_id");
-			Thread.sleep(1024);
+			Thread.sleep(1536);
 			while(true)
 			{
 				url = new URL("https://help.tencentbot.top/query?request_id=" + result);  
@@ -391,7 +390,7 @@ public class GroupPcrPvpManager
 				//System.out.println(ret.toString());
 				PvpTargetStates rst = new PvpTargetStates(ret.toString());
 				if(rst.Valid == true) return rst;
-				else if(rst.Jjcrank <0) Thread.sleep(1024);
+				else if(rst.Jjcrank <0) Thread.sleep(1536);
 				else return new PvpTargetStates();
 			}
 		}
@@ -399,7 +398,7 @@ public class GroupPcrPvpManager
 		{
 			try
 			{
-				Thread.sleep(1024);
+				Thread.sleep(1536);
 			}
 			catch (Exception e2)
 			{
