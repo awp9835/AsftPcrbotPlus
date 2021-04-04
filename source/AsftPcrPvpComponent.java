@@ -358,6 +358,7 @@ public class AsftPcrPvpComponent implements AwpBotComponent
 				for(String qq :AsftOneBotMessage.createFromCqString(message).getElementDataValueVector("at", "qq"))
 				{
 					InnerGroupPcrPvpManager.banUser(parseLong(qq));
+					InnerGroupPcrPvpManager.leaveGroup(parseLong(qq), mevt.getGroupId());
 				}
 			}
 		}
