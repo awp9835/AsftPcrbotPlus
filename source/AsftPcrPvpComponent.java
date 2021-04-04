@@ -34,7 +34,7 @@ public class AsftPcrPvpComponent implements AwpBotComponent
 	@Override
 	public String getComponentName() 
 	{
-		return "AsftClanChatSaveRecoder";
+		return "AsftPcrPvpComponent";
 	}
 
 	public AsftPcrPvpComponent() 
