@@ -28,9 +28,10 @@ public class GroupPcrPvpManager
 				if(delta.equals("done")) Valid = true;
 				else if(delta.equals("queue"))
 				{
-					Jjcrank = -obj.optInt("pos",10000);
+					Jjcrank = -obj.optInt("pos", 10000);
 					Pjcrank = Jjcrank;
 					Valid = false;
+					return;
 				}
 				else 
 				{
@@ -328,21 +329,29 @@ public class GroupPcrPvpManager
 		}
 		public int renew(int halftimeout)
 		{
-			int cnt = 0;
+			IntReference cnt = new IntReference(0);
 			for(Long key: Target_States_Map.keySet())
 			{
 				PvpTargetStates[] newold = Target_States_Map.get(key);
 				if(newold == null) continue;
-				cnt++;
-				PvpTargetStates states = requestPvpTargetStates(key, halftimeout);
+				PvpTargetStates states = requestPvpTargetStates(key, halftimeout, cnt);
 				if(newold[0].Valid) newold[1] = newold[0];
 				newold[0] = states;	
 			}
-			return cnt;
+			return cnt.get();
 		}
 	}
-
-	public static PvpTargetStates requestPvpTargetStates(long target, int halftimeout)
+	public static class IntReference
+	{
+		public int value;
+		public IntReference(){}
+		public IntReference(int p){value = p;}
+		public void set(int p){value = p;}
+		public int get(){return value;}
+		@Override
+		public String toString(){return String.valueOf(value);}
+	}
+	public static PvpTargetStates requestPvpTargetStates(long target, int halftimeout,IntReference delaycnt)
 	{
 		try
 		{
@@ -364,9 +373,11 @@ public class GroupPcrPvpManager
 			}  
 			is.close();  
 			ret.close();  
+			conn.disconnect();
 			String result = new JSONObject(ret.toString()).optString("request_id",null);
 			if(result == null) result = new JSONObject(ret.toString()).getString("reqeust_id");
-			Thread.sleep(1536);
+			Thread.sleep(1200);
+			delaycnt.value += 1;
 			while(true)
 			{
 				url = new URL("https://help.tencentbot.top/query?request_id=" + result);  
@@ -387,10 +398,15 @@ public class GroupPcrPvpManager
 				}  
 				is.close();  
 				ret.close();  
+				conn.disconnect();
 				//System.out.println(ret.toString());
 				PvpTargetStates rst = new PvpTargetStates(ret.toString());
 				if(rst.Valid == true) return rst;
-				else if(rst.Jjcrank <0) Thread.sleep(1536);
+				else if(rst.Jjcrank <0) 
+				{
+					Thread.sleep(1200);
+					delaycnt.value += 1;
+				}
 				else return new PvpTargetStates();
 			}
 		}
@@ -398,7 +414,8 @@ public class GroupPcrPvpManager
 		{
 			try
 			{
-				Thread.sleep(1536);
+				Thread.sleep(1200);
+				delaycnt.value += 1;
 			}
 			catch (Exception e2)
 			{
@@ -658,11 +675,12 @@ public class GroupPcrPvpManager
 		}  
 		is.close();  
 		ret.close();  
+		conn.disconnect();
 		JSONObject obj = new JSONObject(ret.toString());
 		return new JSONArray(obj.getJSONArray("data"));
 	}
 
-
+	
 	private class PvpFollowLoop extends Thread
 	{
 		public PvpFollowLoop(){}
@@ -673,14 +691,13 @@ public class GroupPcrPvpManager
 			{
 				try
 				{
-					Thread.sleep(60000);
 					float cnt = 0;
 					for(Long groupid: GroupGlobalPvpManagerMap.keySet())
 					{
 						if(isBlackGroup(groupid)) continue;
 						PvpTargetSettings settings = GroupGlobalPvpManagerMap.get(groupid);
 						if(settings == null) continue;
-						cnt += 1.0f * settings.renew(1000);
+						cnt += (float)settings.renew(1200);
 						for(Long userid :settings.Id_Targets_Map.keySet())
 						{
 							if(isBlackUser(userid)) continue;
@@ -738,8 +755,10 @@ public class GroupPcrPvpManager
 							}
 						}
 					}
-					cnt *= 1.537f;
-					if((int)cnt < 60L * (IntervalMin - 1)) Thread.sleep(((long) (IntervalMin -1) * 60L - (int)cnt) * 1000);
+					//System.out.println(cnt);
+					cnt *= 1.2f;
+					Fanshehu = (int)(cnt + 0.5);
+					if(0 < 60L * (long)(IntervalMin) - (long)cnt) Thread.sleep(((long) (IntervalMin) * 60L - (int)cnt) * 1000);
 				}
 				catch(Exception e)
 				{
@@ -754,7 +773,7 @@ public class GroupPcrPvpManager
 	private HashSet<Long> BlackList, BlackGroupList;
 	private int IntervalMin;
 	public AwpBotInterface Bot;
-
+	public int Fanshehu;
 	public void asyncQueryGuildStates(AwpBotInterface bot, long userid, long groupid, String clanName, boolean fiveoclock)
 	{
 		if(isBlackUser(userid)||isBlackGroup(groupid)) return;
@@ -970,6 +989,7 @@ public class GroupPcrPvpManager
 	public GroupPcrPvpManager(AwpBotInterface bot)
 	{
 		IntervalMin = 1;
+		Fanshehu = 0;
 		Bot = bot;
 		if(bot != null) new PvpFollowLoop().start();
 	}

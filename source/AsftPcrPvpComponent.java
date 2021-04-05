@@ -169,11 +169,15 @@ public class AsftPcrPvpComponent implements AwpBotComponent
 		}
 		else if(message.toLowerCase(Locale.ROOT).equals("version"))
 		{
-			reply = "灵梦PVP插件V1.0\n本插件不可跨群使用，可发送 \"PVP帮助\" 获取使用方法";
+			reply = "灵梦PVP插件V1.1\n本插件不可跨群使用，可发送 \"PVP帮助\" 获取使用方法";
+		}
+		else if(message.equals("反射弧"))
+		{
+			reply = "当前灵梦PVP插件的反射弧至少为" + InnerGroupPcrPvpManager.Fanshehu + "秒。";
 		}
 		else if(message.equals("帮助")||message.toLowerCase(Locale.ROOT).equals("pvp帮助"))
 		{
-			reply = "灵梦PVP插件V1.0\n指令格式(空格不可省略，名称可省略，[]表示选择其一)：\n"+
+			reply = "灵梦PVP插件V1.1\n指令格式(空格不可省略，名称可省略，[]表示选择其一)：\n"+
 			"[查询 查询昨日][公会 档线] 名称\n"+
 			"（例如：查询昨日公会 灵梦）\n"+
 			"[双场 战斗 公主][排名 下降 上升]追踪 数字ID 名称\n"+
@@ -209,7 +213,7 @@ public class AsftPcrPvpComponent implements AwpBotComponent
 		int shishanflag = 0;
 		if(message.toLowerCase(Locale.ROOT).equals("version"))
 		{
-			reply = "灵梦PVP插件V1.0\n本插件不可跨群使用，可发送 \"PVP帮助\" 获取使用方法。\n";
+			reply = "灵梦PVP插件V1.1\n本插件不可跨群使用，可发送 \"PVP帮助\" 获取使用方法。\n";
 			shishanflag = 0x100;
 			if(InnerGroupPcrPvpManager.getAllGroups().contains(mevt.getGroupId()))
 			{
@@ -223,7 +227,7 @@ public class AsftPcrPvpComponent implements AwpBotComponent
 		else if(message.equals("帮助")||message.toLowerCase(Locale.ROOT).equals("pvp帮助"))
 		{
 			shishanflag = 0x101;
-			reply = "灵梦PVP插件V1.0\n指令格式(空格不可省略。[]表示选择其一)：\n"+
+			reply = "灵梦PVP插件V1.1\n指令格式(空格不可省略。[]表示选择其一)：\n"+
 			"[查询 查询昨日][公会 档线] 名称\n"+
 			"（例如：查询公会 灵梦）\n"+
 			"[双场 战斗 公主][排名 下降]追踪 数字ID\n"+
@@ -237,6 +241,11 @@ public class AsftPcrPvpComponent implements AwpBotComponent
 			"注：排名追踪只能在已注册的击剑群内使用，"+
 			"要注册击剑群，请联系主人。\n";
 		}
+		else if(message.equals("反射弧"))
+		{
+			reply = "当前灵梦PVP插件的反射弧至少为" + InnerGroupPcrPvpManager.Fanshehu + "秒。";
+		}
+		
 		else if(message.startsWith("双场排名追踪")) shishanflag = 0x30;
 		else if(message.startsWith("战斗排名追踪")) shishanflag = 0x10;
 		else if(message.startsWith("公主排名追踪")) shishanflag = 0x20;
