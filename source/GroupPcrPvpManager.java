@@ -757,7 +757,7 @@ public class GroupPcrPvpManager
 					}
 					//System.out.println(cnt);
 					cnt *= 1.2f;
-					Fanshehu = (int)(cnt + 0.5);
+					Fanshehu = (int)(cnt + 0.5f);
 					if(0 < 60L * (long)(IntervalMin) - (long)cnt) Thread.sleep(((long) (IntervalMin) * 60L - (int)cnt) * 1000);
 				}
 				catch(Exception e)
