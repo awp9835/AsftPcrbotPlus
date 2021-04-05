@@ -66,7 +66,7 @@ public abstract class AwpBotBridge implements AwpBotComponent
 		@Override
 		public void onMessage(String message) 
 		{
-			System.out.println(message);
+			//System.out.println(message);
 			AwpBotInterface bot = Bot;
 			try 
 			{
