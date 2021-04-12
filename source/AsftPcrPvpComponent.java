@@ -116,11 +116,11 @@ public class AsftPcrPvpComponent implements AwpBotComponent
 		{
 			reply = "已注册的击剑群：" + InnerGroupPcrPvpManager.getAllGroups();
 		}
-		else if(message.startsWith("设置PVP查询周期"))
+		else if(message.toLowerCase(Locale.ROOT).startsWith("设置pvp查询周期"))
 		{
 			if(GroupPcrPvpManager.isOwner(mevt.getUserId()))
 			{
-				int minute = AsftInt.parseInt(message.replaceFirst("设置PVP查询周期", "").trim());
+				int minute = AsftInt.parseInt(message.toLowerCase(Locale.ROOT).replaceFirst("设置pvp查询周期", "").trim());
 				if(minute <= 0) minute = 1;
 				InnerGroupPcrPvpManager.setInterval(minute);
 				reply = "已设置查询周期为"+ minute + "分钟";

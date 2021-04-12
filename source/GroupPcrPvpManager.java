@@ -780,8 +780,8 @@ public class GroupPcrPvpManager
 		long history = 0;
 		if(fiveoclock)
 		{
-			history = System.currentTimeMillis() + 9000000L; //5:30
-			history = history / 86400000L* 86400000L - 9000000L;
+			history = System.currentTimeMillis() + 10800000L; //5:00
+			history = history / 86400000L* 86400000L - 10800000L;
 			history /= 1000L;
 		}
 		new AsyncRequestGuildStates(bot, groupid, clanName, false, history).start();
