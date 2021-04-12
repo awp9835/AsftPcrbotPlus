@@ -650,7 +650,7 @@ public class GroupPcrPvpManager
 	{
 		URL url = null;
 		if(line) url = new URL("https://service-kjcbcnmw-1254119946.gz.apigw.tencentcs.com/line");  
-		else url = new URL("https://service-kjcbcnmw-1254119946.gz.apigw.tencentcs.com/name/-1");  
+		else url = new URL("https://service-kjcbcnmw-1254119946.gz.apigw.tencentcs.com/name/0");  
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();  
 		conn.setRequestMethod("POST");
 		conn.setReadTimeout(timeout);
@@ -780,8 +780,8 @@ public class GroupPcrPvpManager
 		long history = 0;
 		if(fiveoclock)
 		{
-			history = System.currentTimeMillis() + 10800000L; //5:00
-			history = history / 86400000L* 86400000L - 10800000L;
+			history = System.currentTimeMillis() + 9000000L; //5:30
+			history = history / 86400000L* 86400000L - 9000000L;
 			history /= 1000L;
 		}
 		new AsyncRequestGuildStates(bot, groupid, clanName, false, history).start();
