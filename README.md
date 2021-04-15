@@ -14,8 +14,13 @@ OneBot标准：https://github.com/howmanybots/onebot
 Yobot：https://yobot.win/   
 Kyouka：https://github.com/Kengxxiao/Kyouka   
 竞技场API：参考自https://github.com/lulu666lulu/pcrjjc 的README.md   
-竞技场有查询间隔限制，反射弧长   
-```   
+竞技场有查询间隔限制，反射弧长    
+# 注意：竞技场API是公用API，禁止商用，建议自行搭建 #
+如果想用更稳定更快的jjc排名查询，可以考虑自己搭一个api服务器，然后修改项目中的help.tencentbot.top为自行搭建api的地址，重新编译并运行。   
+目前有c#版本（禁止商用）：https://github.com/qq1176321897/pcrjjc-backend ，如果是linux可以考虑用wine（不保证好用）。    
+目前本人有用java将其移植到linux的计划（同样禁止商用）。 
+  
+```    
 //每查询一次排名要调用至少2次API，请至少间隔1000ms调用。    
 https://help.tencentbot.top/enqueue?target_viewer_id=...   
 //target_viewer_id：你的游戏内数字ID   
