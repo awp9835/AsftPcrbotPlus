@@ -360,7 +360,6 @@ public class GroupPcrPvpManager
 			conn.setRequestMethod("GET");
 			conn.setReadTimeout(halftimeout);
 			conn.setConnectTimeout(halftimeout);
-			conn.setDoOutput(true);
 			conn.setUseCaches(false);
 			conn.connect();
 			InputStream is = conn.getInputStream();  
@@ -386,7 +385,6 @@ public class GroupPcrPvpManager
 				conn.setRequestMethod("GET");
 				conn.setReadTimeout(halftimeout);
 				conn.setConnectTimeout(halftimeout);
-				conn.setDoOutput(true);
 				conn.setUseCaches(false);
 				conn.connect();
 				is = conn.getInputStream();  
@@ -622,6 +620,7 @@ public class GroupPcrPvpManager
 					boolean fenjie = false;
 					for(Object oobj:array)
 					{
+						
 						JSONObject obj = (JSONObject)oobj;
 						long score = obj.optLong("damage");
 						long damage = calcTotalDamage(score);
@@ -649,8 +648,8 @@ public class GroupPcrPvpManager
 	private static JSONArray requestGuildStates(String clanName,boolean line, long history,int timeout) throws Exception
 	{
 		URL url = null;
-		if(line) url = new URL("https://service-kjcbcnmw-1254119946.gz.apigw.tencentcs.com/line");  
-		else url = new URL("https://service-kjcbcnmw-1254119946.gz.apigw.tencentcs.com/name/0");  
+		if(line) url = new URL("https://service-kjcbcnmw-1254119946.gz.apigw.tencentcs.com//line");  
+		else url = new URL("https://service-kjcbcnmw-1254119946.gz.apigw.tencentcs.com//name/0");  
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();  
 		conn.setRequestMethod("POST");
 		conn.setReadTimeout(timeout);
@@ -659,11 +658,11 @@ public class GroupPcrPvpManager
 		conn.setDoInput(true);
 		conn.setUseCaches(false);
 		conn.setRequestProperty("Content-type", "application/json");  
-		conn.setRequestProperty("Custom-Source","GitHub@var-mixer");  
-		conn.setRequestProperty("Referer", "https://kengxxiao.github.io/Kyouka/");  
+		conn.setRequestProperty("Custom-Source","github@awp9835");  
+		conn.setRequestProperty("Referer", "https://kengxxiao.github.io");  
 		OutputStream out = conn.getOutputStream();
 		if(line) out.write(("{\"history\":"+ history +"}").getBytes());
-		else out.write(("{\"history\":" + history + ",\"clanName\": \""+ clanName.replaceAll("\\\\","\\\\\\\\").replaceAll("\"", "\\\\\"")+"\"}").getBytes());
+		else out.write(("{\"history\":" + history + ",\"clanName\":\""+ clanName.replaceAll("\\\\","\\\\\\\\").replaceAll("\"", "\\\\\"")+"\"}").getBytes());
 		out.flush();
 		InputStream is = conn.getInputStream();   
 		ByteArrayOutputStream ret = new ByteArrayOutputStream();  
@@ -774,28 +773,72 @@ public class GroupPcrPvpManager
 	private int IntervalMin;
 	public AwpBotInterface Bot;
 	public int Fanshehu;
+	private long LastHistoryTs;
+	private long renewLastHistoryTs()
+	{
+		long five = System.currentTimeMillis() / 1000L + 10800L;
+		five = five / 86400L* 86400L - 10800L;
+		if(five > LastHistoryTs)
+		{
+			//五点的数据该更新了
+			try
+			{
+				URL url = new URL("https://service-kjcbcnmw-1254119946.gz.apigw.tencentcs.com//default");   
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();  
+				conn.setRequestMethod("GET");
+				conn.setReadTimeout(3000);
+				conn.setConnectTimeout(3000);
+				conn.setUseCaches(false);
+				conn.setRequestProperty("Content-type", "application/json");  
+				conn.setRequestProperty("Custom-Source","github@awp9835");  
+				conn.setRequestProperty("Referer", "https://kengxxiao.github.io");  
+				conn.connect();
+				InputStream is = conn.getInputStream();   
+				ByteArrayOutputStream res = new ByteArrayOutputStream();  
+				int len = 0;  
+				byte buffer[] = new byte[4096];  
+				while ((len = is.read(buffer)) != -1) 
+				{  
+					res.write(buffer, 0, len);  
+				}  
+				is.close();  
+				res.close();  
+				conn.disconnect();
+				JSONObject obj = new JSONObject(res.toString());
+				obj = obj.optJSONObject("historyV2");
+				for(String str:obj.keySet())
+				{
+					long tlong = 0;
+					try
+					{
+						tlong = Long.parseLong(str);
+					}
+					catch(NumberFormatException e)
+					{
+						continue;
+					}
+					if(tlong > LastHistoryTs) LastHistoryTs = tlong;
+				}
+			}
+			catch(Exception e)
+			{
+				//do nothing 
+			}
+		}
+		return LastHistoryTs;
+	}
 	public void asyncQueryGuildStates(AwpBotInterface bot, long userid, long groupid, String clanName, boolean fiveoclock)
 	{
 		if(isBlackUser(userid)||isBlackGroup(groupid)) return;
 		long history = 0;
-		if(fiveoclock)
-		{
-			history = System.currentTimeMillis() + 9000000L; //5:30
-			history = history / 86400000L* 86400000L - 9000000L;
-			history /= 1000L;
-		}
+		if(fiveoclock) history = renewLastHistoryTs();
 		new AsyncRequestGuildStates(bot, groupid, clanName, false, history).start();
 	}
 	public  void asyncQueryLineGuildStates(AwpBotInterface bot,long userid, long groupid, boolean fiveoclock)
 	{
 		if(isBlackUser(userid)||isBlackGroup(groupid)) return;
 		long history = 0;
-		if(fiveoclock)
-		{
-			history = System.currentTimeMillis() + 9000000L; //5:30
-			history = history / 86400000L* 86400000L - 9000000L;
-			history /= 1000L;
-		}
+		if(fiveoclock) history = renewLastHistoryTs();
 		new AsyncRequestGuildStates(bot, groupid, null, true, history).start();
 	}
 	public boolean addTarget(long userid,long groupid,long target,boolean jjc,boolean pjc, boolean self)
@@ -991,6 +1034,7 @@ public class GroupPcrPvpManager
 		IntervalMin = 1;
 		Fanshehu = 0;
 		Bot = bot;
+		LastHistoryTs = 0;
 		if(bot != null) new PvpFollowLoop().start();
 	}
 	public boolean save()
