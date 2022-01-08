@@ -37,7 +37,7 @@ public abstract class AwpBotBridge implements AwpBotComponent
 		{
 			super(new URI(uri));
 			String accesstoken = AccessToken;
-			if(accesstoken != null && accesstoken.trim().length() != 0)
+			if(accesstoken != null)
 			{
 				this.addHeader("Authorization", "Bearer " + accesstoken.trim());
 			}
