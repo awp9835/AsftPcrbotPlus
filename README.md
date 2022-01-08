@@ -1,22 +1,34 @@
 ﻿# AsftPcrbotPlus   
 公主连结bot增强插件：     
-本插件基于AwpBot,可添加AwpBot组件，自动连接到yobot，也可连接到其他bot。    
+本插件基于AwpBot,可添加AwpBot组件，自动连接到yobot，也可连接到多个任何符合OneBot标准的bot。    
 目前实现的功能：
 1. 灵梦记轴插件：记录和查询   
 2. 连接到yobot  
-3. 查询公会排名，jjc排名追踪提醒   
+3. 查询公会排名，jjc排名追踪提醒（公会排名血量总是变，进度不对；jjc排名功能已经G了）   
+
+
 
 群内发送 帮助 可获取使用方法。
 如果你是主人，请私聊bot发送 主人 获取主人可用的功能。   
 * 主人的命令和参数用空格分割，请自行摸索所需参数，提示：注册击剑群的参数为群号。 
 
-# 技术引用和API #   
+# 无法连接到Yobot或者其他Bot的情况 # 
+1. 对方使用了白名单或只允许本地连接   
+2. 对方Bot炸了    
+3. 对方Bot配置文件讲access_token设置为""空字符串，这是一种未定义行为。如果你使用最新版的yobot，
+请更新代码到最新版本，并在UserYobotBridge1.java中取消```this.setAccessToken("");```的注释，或者将yobot_config.json的access_token字段删除，你也可以在yobot_config.json和YobotUserYobotBridge1.java同时设置有效的access_token。   
+# access_token为""空字符串或者两端含有空格字符是一种未定义行为！ # 
+   
+   
+# 技术引用和API # 
 OneBot标准：https://github.com/howmanybots/onebot   
 Yobot：https://yobot.win/   
 Kyouka：https://github.com/Kengxxiao/Kyouka   
 竞技场API：参考自https://github.com/lulu666lulu/pcrjjc 的README.md   
 竞技场有查询间隔限制，反射弧长    
-# 注意：竞技场API是公用API，禁止商用，建议自行搭建 #
+
+# 竞技场API已经GG了，请使用其他支援BOT，详见后面的连接到其他BOT #   
+# 注意：竞技场API是公用API，禁止商用，建议自行搭建 #   
 如果想用更稳定更快的jjc排名查询，可以考虑自己搭一个api服务器，然后修改项目中的help.tencentbot.top为自行搭建api的地址，重新编译并运行。   
 目前有c#版本（禁止商用）：https://github.com/qq1176321897/pcrjjc-backend ，如果是linux可以考虑用wine（不保证好用）。    
 目前本人有用java将其移植到linux的计划（同样禁止商用）。 
@@ -59,7 +71,7 @@ https://help.tencentbot.top/query?request_id=...
 6. 启动本插件，详见下文。   
 # 鉴权设置 # 
 本插件：打开AwpBot.java, 在InnerWebSocketServer构造方法中给AccessToken赋值；   
-AwpBotBridge连接到其他bot：打开对应的java文件，在config函数中调用setAccessToken方法。   
+AwpBotBridge连接到其他bot：打开对应的java文件，在config函数中调用setAccessToken方法。你需要保证设置的access_token是和对方bot一致的且两端不含空格字符，否则请自行解决兼容问题！   
 # 连接到其他bot插件 #   
 只需要两个步骤     
 1. 创建一个java文件，继承AwpBotBridge类，实现public void config() ，作为AwpBot组件使用。config负责配置ws和其他bot的鉴权，可以通过调用setEventWsUri，setApiWsUri，setUniversalWsUri，setAccessToken四个方法进行设置。你可以参考UserYobotBridge1.java。      
