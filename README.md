@@ -15,9 +15,7 @@
 # 无法连接到Yobot或者其他Bot的情况 # 
 1. 对方使用了白名单或只允许本地连接   
 2. 对方Bot炸了    
-3. 对方Bot配置文件讲access_token设置为""空字符串，这是一种未定义行为。如果你使用最新版的yobot，
-请更新代码到最新版本，并在UserYobotBridge1.java中取消```this.setAccessToken("");```的注释，或者将yobot_config.json的access_token字段删除，你也可以在yobot_config.json和YobotUserYobotBridge1.java同时设置有效的access_token。   
-# access_token为""空字符串或者两端含有空格字符是一种未定义行为！ # 
+3. ws的url后面多个斜杠或少个斜杠，坑的一批，特别是某些插件偷偷改了的话很难发现    
    
    
 # 技术引用和API # 
@@ -72,6 +70,7 @@ https://help.tencentbot.top/query?request_id=...
 # 鉴权设置 # 
 本插件：打开AwpBot.java, 在InnerWebSocketServer构造方法中给AccessToken赋值；   
 AwpBotBridge连接到其他bot：打开对应的java文件，在config函数中调用setAccessToken方法。你需要保证设置的access_token是和对方bot一致的且两端不含空格字符，否则请自行解决兼容问题！   
+当前由于一些插件用的标准不统一，不能相互兼容，所以还是建议不要使用鉴权，改用防火墙。     
 # 连接到其他bot插件 #   
 只需要两个步骤     
 1. 创建一个java文件，继承AwpBotBridge类，实现public void config() ，作为AwpBot组件使用。config负责配置ws和其他bot的鉴权，可以通过调用setEventWsUri，setApiWsUri，setUniversalWsUri，setAccessToken四个方法进行设置。你可以参考UserYobotBridge1.java。      
